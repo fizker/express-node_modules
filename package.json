@@ -1,0 +1,13 @@
+{ "name": "express-node_modules"
+, "version": "0.1.0"
+, "description": "A simple handler for loading libraries from node_modules to clients"
+, "main": "index.js"
+, "scripts":
+  { "test": "echo \"Error: no test specified\" && exit 1"
+  }
+, "keywords":
+  [ "express"
+  ]
+, "author": "Benjamin Horsleben"
+, "license": "WTFPL"
+}

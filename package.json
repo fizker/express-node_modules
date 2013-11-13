@@ -10,4 +10,7 @@
   ]
 , "author": "Benjamin Horsleben"
 , "license": "WTFPL"
+, "dependencies":
+  { "q": "~0.9.7"
+  }
 }

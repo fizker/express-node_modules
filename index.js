@@ -6,7 +6,7 @@ var url = require('url')
 var moduleMatcher = /(\.min)?\.js$/
 
 function init(path, opts, require) {
-	if(!opts) {
+	if(!require) {
 		require = opts
 		opts = {}
 	}

@@ -1,6 +1,6 @@
 { "name": "express-node_modules"
 , "version": "0.1.0"
-, "description": "A simple handler for loading libraries from node_modules to clients"
+, "description": "A simple express plug-in for delivering libraries from node_modules to client browsers."
 , "main": "index.js"
 , "scripts":
   { "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,6 +11,6 @@
 , "author": "Benjamin Horsleben"
 , "license": "WTFPL"
 , "dependencies":
-  { "q": "~0.9.7"
+  {
   }
 }

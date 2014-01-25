@@ -29,7 +29,12 @@ function init(path, opts, require) {
 			moduleName = opts.paths[moduleName]
 		}
 
-		var modulePath = require.resolve(moduleName)
+		var modulePath
+		try {
+			modulePath = require.resolve(moduleName)
+		} catch(e) {
+			return res.send(404)
+		}
 
 		readFile(modulePath, 'utf8', function(err, content) {
 			if(err) return res.send(404)

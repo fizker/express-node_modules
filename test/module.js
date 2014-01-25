@@ -87,6 +87,28 @@ describe('module.js', function() {
 						res.send
 							.should.have.been.calledWith(200, 'content of file')
 					})
+					it('should set `content-type` to `application/javascript`', function() {
+						res.set
+							.should.have.been.calledWith(
+								'content-type',
+								'application/javascript; charset=UTF-8'
+							)
+					})
+				})
+
+				describe('and require finds no module', function() {
+					beforeEach(function() {
+						fakeRequire.resolve.throws(new Error)
+						middleware(req, res, next)
+					})
+					it('should send 404', function() {
+						res.send
+							.should.have.been.calledWith(404)
+					})
+					it('should not set any headers', function() {
+						res.set
+							.should.not.have.been.called
+					})
 				})
 			})
 

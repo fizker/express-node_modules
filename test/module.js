@@ -45,18 +45,37 @@ describe('module.js', function() {
 			var req
 			var res
 			var next
-			var i=0
 			beforeEach(function() {
-				i++
 				req =
 					{ method: 'GET'
 					}
 				res =
 					{ send: fzkes.fake('res.send')
 					, set: fzkes.fake('res.set')
-					, bob: i
 					}
 				next = fzkes.fake('next')
+			})
+
+			describe('with a url with components matching the path', function() {
+				beforeEach(function() {
+					req.originalUrl = '/a/module/component'
+					middleware(req, res, next)
+				})
+				it('should ask `require.resolve` for the module', function() {
+					fakeRequire.resolve
+						.should.have.been.calledWith('module/component')
+				})
+			})
+
+			describe('with a matching url ending with `.js`', function() {
+				beforeEach(function() {
+					req.originalUrl = '/a/module.js'
+					middleware(req, res, next)
+				})
+				it('should strip the extension before asking require', function() {
+					fakeRequire.resolve
+						.should.have.been.calledWith('module')
+				})
 			})
 
 			describe('with a url matching the path', function() {
@@ -125,6 +144,80 @@ describe('module.js', function() {
 						.should.not.have.been.called
 					res.set
 						.should.not.have.been.called
+				})
+			})
+		})
+	})
+
+	describe('When calling the module with a path, a paths-option and a require', function() {
+		var middleware
+		beforeEach(function() {
+			var paths =
+				{ module: 'real-module'
+				}
+			middleware = module('/a', { paths: paths }, fakeRequire)
+		})
+		it('should return a middleware function', function() {
+			middleware.should.be.a('function')
+			middleware.should.have.length(3)
+		})
+
+		describe('and the middleware gets a `GET` request', function() {
+			var req
+			var res
+			var next
+			beforeEach(function() {
+				req =
+					{ method: 'GET'
+					}
+				res =
+					{ send: fzkes.fake('res.send')
+					, set: fzkes.fake('res.set')
+					}
+				next = fzkes.fake('next')
+			})
+
+			describe('with a matching url ending with `.js`', function() {
+				beforeEach(function() {
+					req.originalUrl = '/a/module.js'
+					middleware(req, res, next)
+				})
+				it('should strip the extension before asking require', function() {
+					fakeRequire.resolve
+						.should.have.been.calledWith('real-module')
+				})
+			})
+
+			describe('with a url where multiple components match the path', function() {
+				beforeEach(function() {
+					req.originalUrl = '/a/module/module'
+					middleware(req, res, next)
+				})
+				it('should ask require for the right module', function() {
+					fakeRequire.resolve
+						.should.have.been.calledWith('real-module/module')
+				})
+			})
+
+			describe('with a url with components matching the path', function() {
+				beforeEach(function() {
+					req.originalUrl = '/a/module/component'
+					middleware(req, res, next)
+				})
+				it('should ask `require.resolve` for the module', function() {
+					fakeRequire.resolve
+						.should.have.been.calledWith('real-module/component')
+				})
+			})
+
+			describe('with a url matching the path', function() {
+				beforeEach(function() {
+					req.originalUrl = '/a/module'
+					middleware(req, res, next)
+				})
+				it('should ask `require.resolve` for the module', function() {
+					fakeRequire.resolve
+						.should.have.been.calledWith('real-module')
 				})
 			})
 		})

@@ -15,7 +15,7 @@ function init(path, opts, require) {
 
 	if(path.substr(-1) == '/') path = path.substring(0, path.length-1)
 	if(path[0] != '/') path = '/' + path
-	var paramMatcher = new RegExp(path + '/([^/]+)')
+	var paramMatcher = new RegExp(path + '/(.+)')
 	return function(req, res, next) {
 		if(req.method != 'GET' && req.method != 'HEAD') return next()
 		var requestedPath = url.parse(req.originalUrl).pathname
@@ -25,8 +25,15 @@ function init(path, opts, require) {
 
 		var file = param[1]
 		var moduleName = file.replace(moduleMatcher, '')
-		if(opts.paths && opts.paths[moduleName]) {
-			moduleName = opts.paths[moduleName]
+		if(opts.paths) {
+			if(opts.paths[moduleName]) {
+				moduleName = opts.paths[moduleName]
+			} else {
+				moduleName = moduleName.split('/').reduce(function(combined, component) {
+					combined = opts.paths[combined] || combined
+					return combined + '/' + component
+				})
+			}
 		}
 
 		var modulePath

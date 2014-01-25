@@ -6,10 +6,12 @@ var url = require('url')
 var moduleMatcher = /(\.min)?\.js$/
 
 function init(path, opts, require) {
+	if(!path) throw new Error('Path required as the first parameter')
 	if(!require) {
 		require = opts
 		opts = {}
 	}
+	if(!require) throw new Error('A require instance is required')
 
 	if(path.substr(-1) == '/') path = path.substring(0, path.length-1)
 	if(path[0] != '/') path = '/' + path

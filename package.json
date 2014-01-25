@@ -13,4 +13,9 @@
 , "dependencies":
   {
   }
+, "devDependencies":
+  { "chai": "~1.8.1"
+  , "mocha": "~1.17.0"
+  , "fzkes": "~0.13.0"
+  }
 }
